@@ -1,0 +1,41 @@
+1. Support one way follows relationship
+    + follows relationship
+		+ can follow and unfollow
+		+ friends relationship replaces follow 
+		+ follow is ignored if the user's are already friends
+		+ suggest both new possible friends and users to follow
+
+2. Relationship changes
+    + when Alice and Bob become friends
+			+ suggest Alice's friends that are not Bob's friends as new friends for Bob
+			+ suggest Bob's friends that are not Alice's friends as new friends for Alice
+			+ suggest Alice's followed users that are not Bob's followed users or friends as new followed users for Bob
+			+ suggest Bob's followed users that are not Alice's followed users as new followed users for Alice
+		+ when Alice follows Bob
+			+ suggest Alice's friends that do not follow Bob to follow Bob
+3. Handle improper input
+    + output line with an error
+		+ too many tokens
+		+ too few tokens
+		+ relationship types other than friend or follow
+		+ same user twice
+
+4. Add Unit tests for any new classes
+
+Bonus:  
+    Learn about Factory pattern
+    Implement factory pattern for relationships or users
+
+Add a factory
+    + Builds relationships given the input
+    + Allows easy addition of new relationships
+		+ Separate relationship and factory classes
+
+Extensions designed 10% (UML diagram)
+Extensions implemented 20%
+Extensions tested 20%
+Refactorings described (4) 10%
+Refactorings implemented (2) 10%
+Code Clarity 10%
+Document Clarity 10%
+Factory 10% Bonus

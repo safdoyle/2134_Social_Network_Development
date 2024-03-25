@@ -1,0 +1,42 @@
+Class-level Refactoring Report
+==========
+
+For each refactoring opportunity , please provide the following information:
+    - where the issue is
+    - what SOLID principle (if any) are violated
+    - whether a class implementation or class interface refactoring
+      is needed
+    - a brief description of each issue
+    - how to fix the issue
+
+CLASS-LEVEL REFACTORING IMPLEMENTED
+
+Refactoring 0:
+  Location:
+	SOLID principle:
+	class implementation or class interface:
+	Cause:
+	Fix:
+
+Refactoring 1:
+  Location:
+	SOLID principle:
+	class implementation or class interface:
+	Cause:
+
+CLASS-LEVEL REFACTORING SUGGESTED BUT NOT IMPLEMENTED
+
+Refactoring 2:
+  Location:
+	SOLID principle:
+	class implementation or class interface:
+	Cause:
+	Fix:
+
+Refactoring 3:
+  Location:
+	SOLID principle:
+	class implementation or class interface:
+	Cause:
+	Fix:
+

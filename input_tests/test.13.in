@@ -1,0 +1,12 @@
+Alice joins
+Carol joins
+Bob joins
+Bob friends Alice
+Bob friends Carol
+Dave joins Bob
+Dave friends Bob
+Alice leaves
+Bob leaves
+Carol leaves
+Dave leaves
+end

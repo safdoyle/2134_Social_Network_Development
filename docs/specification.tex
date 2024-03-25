@@ -1,0 +1,408 @@
+\documentclass[12pt,pdftex]{article}
+
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{url}
+
+\begin{document}
+\newcommand{\Term}{Winter 2018}
+\newcommand{\Course}{CSCI2110}
+\newcommand{\Assignment}{Friend Recommendation}
+\newcommand{\Due}{12:00 noon, Monday, March 26, 2018}
+
+\renewcommand{\headheight}{15pt}
+\renewcommand{\headsep}{5pt}
+\pagestyle{fancy}
+\lhead{\bf \Course}
+\chead{\bf \Term}
+\rhead{\bf \Assignment}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\title{\vspace*{-12ex}
+       \Course\\
+       \Assignment}
+%\author{Instructor: Alex Brodsky}
+%\date{Due: \Due}
+\maketitle
+
+\newcommand{\ignore}[1]{}
+\newcommand{\noignore}[1]{#1}
+\newcommand{\docommand}[1]{\begin{center} \fbox{\bf\tt #1} \end{center}}
+\newcommand{\NoItemSpace}{\setlength{\parskip}{0pt}
+                          \setlength{\partopsep}{0pt}
+                          \setlength{\parsep}{0pt}
+                          \setlength{\itemsep}{0pt}}
+
+
+\newcommand{\Tag}[1]{``{\tt #1}''}
+
+\textbf{Note: This specification is provided as part of Assignment 2, 3 and 4 of CSCI2134 in Winter 2024 and explains what the code is supposed to do. Please see the assignment instructions for your task, e.g. writing unit tests for the code. Do not spend time writing code for the friend recommendation problem.}
+\vspace{1em}
+
+The purpose of this assignment is to get you to create and use maps and graphs,
+and further improve your programming skills.
+% practice a bit more recursion to 
+
+As discussed in class and the first tutorial, for each problem you will 
+be provided with a description of the problem and a JUnit test class 
+to test your code.  A similar JUnit test class will be used to evaluate
+your code.  You can use Eclipse or other IDEs to run the JUnit test class
+to test your code.
+
+Your code {\bf must} compile.  If it does not compile, you will receive a 
+$0$ on the assignment.
+
+
+\noignore{
+\begin{figure}[h]
+\begin{center}
+\ \includegraphics[scale=0.50]{figures/social-network-grid.jpg}\ 
+\end{center}
+\caption{\footnotesize\protect\url{www.stockphotosecrets.com/free-photos/free-vectors/social-network-grid.html}}
+\end{figure}
+}
+
+\section*{Background: Social Networks}
+Social networks are networks that represent relationships between
+people.  One common relationship is ``friend''.  This relationship
+is bidirectional, e.g., if Alice is friends with Bob, then Bob is
+friends with Alice.  Social networks are constantly changing as
+users join or leave the network, and friend or unfriend other users.
+Many social networks have a ``friend recommender'' feature that
+recommends new friends to members if they share a mutual friend.
+For example, if Alice is friends with Bob, and Carol befriends Bob,
+the system will recommend Alice and Carol to each other. 
+
+
+\section*{Problem: Recommend Friends}
+Given a series of user actions in the social network that is initially empty, 
+recommend new possible friendships after one user friends another user.
+For example, if Alice, Bob, and Carol are all network members, and Alice
+and Bob are friends.  If Bob and Carol become friends, then your program
+should recommend that Alice and Carol should become friends.
+
+For example, given the user actions 
+\begin{figure}[h]
+\begin{quote}
+\begin{verbatim}
+Alice joins
+Carol joins
+Bob joins
+Bob friends Alice
+Bob friends Carol
+Dave joins
+Dave friends Bob
+end
+\end{verbatim}
+\end{quote}
+\caption{Sample user actions.  \label{fig:input}}
+\end{figure}
+the resulting recommendations would be:
+\begin{figure}[h]
+\begin{quote}
+\begin{verbatim}
+Alice and Carol should be friends
+Alice and Dave should be friends
+Carol and Dave should be friends
+\end{verbatim}
+\end{quote}
+\caption{Friend recommendations based on user actions in 
+         Figure~\ref{fig:input}
+         \label{fig:output}}
+\end{figure}
+
+Your task is to create a program that reads in the user actions and
+generates the friend recommendations.
+
+Write a program called {\tt Friend.java} that reads in the user actions
+from the console ({\it System.in}) and outputs the corresponding 
+friend recommendations.  {\bf Your {\tt Friend} class must implement
+the provided {\tt Tester} interface and also contain the {\tt main()}
+method where your program starts running.}  This is because your
+program will be tested via this interface.  The interface contains
+a single method:
+\begin{quote}
+\begin{verbatim}
+public ArrayList<String> compute( Scanner input );
+\end{verbatim}
+\end{quote}
+This method must perform the required computation.
+
+\subsection*{Input}
+The {\tt compute()} method takes a {\it Scanner} object, which contains 
+one or more lines.  Each line, except the last one, contains a user
+action.  There are four user actions:
+\begin{quote}
+\begin{description}\NoItemSpace
+\item[{\tt A joins}]: means that new user $A$ has joins the network.
+\item[{\tt A friends B}]: means that user $A$ and $B$ are now friends.
+\item[{\tt A unfriends B}]: means that user $A$ and $B$ are no longer friends.
+\item[{\tt A leaves}]: means that user $A$ has left the network (deleted 
+                     their account).  
+%\item[{\tt end}]: end program
+\end{description}
+\end{quote}
+where {\it A} and {\it B} are names of users.  The user names are
+single words with no white spaces within them.  The last line of
+input is simply the word ``{\tt end}''.  See Figure~\ref{fig:input}
+for an example.
+
+Hint:  Use the {\tt nextLine()} method of the {\it Scanner} object to 
+read one line of input at a time, and then parse the line.  See the 
+solution for Assignment 1 for how to parse input one line at a time.
+
+
+\subsection*{Semantics}
+The social network is initially empty.  All user actions are on the
+same network.  
+
+Only users that are not part of the social network can join.  I.e.,
+each user will have a unique name.  Users can leave the network
+and then rejoin.
+
+When a user leaves the network, the user and all his/her friendships
+are deleted from the network.  If a user rejoins the network, it's
+as if he/she is joining for the first time.
+
+All friendships are symmetrical.  I.e., ``{\tt A friends B}'' is
+the same as ``{\tt B friends A}''.  {\bf No recommendation should
+be generated for users who are already friends.}
+
+\subsection*{Output}
+The method \verb%compute( Scanner input )% should return an {\it
+ArrayList} of {\it String}s denoting the friend recommendations in
+the same order as the user actions that caused them.  A recommendation
+is of the form
+\begin{quote}
+{\tt {\it A} and {\it B} should be friends}
+\end{quote}
+where $A$ and $B$ are user names and {\bf must} be in alphabetical
+order.  For example, this recommendation is correct: ``{\tt Alice
+and Bob should be friends}'', while this one is not: ``{\tt Bob and
+Alice should be friends}''.  If more than one recommendation is
+generated by a single user action (as in Figures~\ref{fig:input}
+and~\ref{fig:output}), the recommendations should be ordered
+alphabetically.
+
+\subsection*{Example}
+% Below are a sequence of examples and the corresponding output.
+
+\begin{tabular}{l|l}
+{\bf Sample Input } & {\bf Sample Output} \\
+\hline
+\begin{minipage}[t]{0.3\linewidth}
+\vspace*{0.5ex}
+\begin{verbatim}
+Alice joins
+Carol joins
+Bob joins
+Bob friends Alice
+Bob friends Carol
+Dave joins
+Dave friends Bob
+end
+\end{verbatim}
+\vspace*{0.5ex}
+\end{minipage} &
+\begin{minipage}[t]{0.5\linewidth}
+\vspace*{0.5ex}
+\begin{verbatim}
+Alice and Carol should be friends
+Alice and Dave should be friends
+Carol and Dave should be friends
+\end{verbatim}
+\end{minipage} \\
+\end{tabular}
+
+\section*{Hints and Suggestions}
+\begin{itemize}\NoItemSpace
+\item Use a 1-pass algorithm:  Simply check for 
+      friendships after processing each user action.
+\item There is not a lot of code to write.  The sample solution is under 
+      115 lines of code.
+\item Your code {\bf must} compile.  If it does not compile, you will
+      receive a $0$ on the assignment.
+\item Your code must be well commented and indented.  Please see the
+      Assignments section for this course on Brightspace for Code 
+      Style Guidelines.
+\item You may assume that all input will be correct.  
+\item Be sure to test your programs using the provided JUnit test class. 
+\end{itemize}
+
+
+\section*{Grading}
+The assignment will be graded based on three criteria: 
+\begin{description}\NoItemSpace
+\item[Functionality] ``Does it work according to specifications?''.  
+   This is determined in an automated fashion by running your program on 
+   a number of inputs and ensuring that the outputs match the expected 
+   outputs.  The score is determined based on the number of tests that
+   your program passes.  So, if your program passes $\frac{t}{T}$ tests,
+   you will receive that proportion of the marks.
+
+\item[Quality of Solution] ``Is it a good solution?''  This considers
+   whether the solution is correct, efficient, covers boundary conditions,
+   does not have any obvious bugs, etc.  This is determined by visual
+   inspection of the code.  Initially full marks are given to each solution
+   and marks are deducted based on faults found in the solution.
+
+\item[Code Clarity] ``Is it well written?''  This considers whether the
+   solution is properly formatted, well documented, and follows 
+   coding style guidelines.  
+\end{description}
+If your program does not compile, it is considered non-functional and of
+extremely poor quality, meaning you will receive $0$ for the solution.
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|c|} \hline
+                                   & {\bf Marks} \\ \hline
+Functionality                      &   20   \\
+Quality of Solution                &   20   \\ 
+
+{\bf Code Clarity}                 &   10   \\ \hline
+\rule{0mm}{5mm} {\large\bf Total}   &  50  \\ \hline
+\end{tabular}
+\end{center}
+\caption{Marking scheme for \Assignment{}.}
+\end{table}
+
+\vspace*{-2ex}
+\section*{What to Hand In}
+\vspace*{-1ex}
+Submit the source files for your program in a zip file (\verb%.zip%).
+You should have at least one source file: {\tt Friend.java}.
+If you are using Eclipse, we recommend that you submit the entire
+project bundle.  Submission is to be done via Brightspace.  Your
+code {\bf must} compile.  If it does not compile, you will receive
+a $0$ on the assignment.
+
+\ignore{
+\newpage
+\thispagestyle{empty}
+
+\begin{center}
+\LARGE{\bf \Course:  \Assignment}\\
+\normalsize \Term
+\end{center}
+
+\begin{center}
+\LARGE
+\begin{tabular}{|l|l|} \hline
+Student Name   & Student Number \\ \hline
+               &                \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\Large
+\begin{tabular}{|l|c|} \hline
+                                   & {\bf Mark} \\ \hline
+{\bf Hello World} (3 pts)         &         \\
+Functionality                      &    \hfill / 1  \\
+Quality of Solution                &    \hfill / 2  \\ \hline
+
+{\bf Prime Factorization} (7 pts)  &         \\
+Functionality                      &    \hfill / 3    \\
+Quality of Solution                &    \hfill / 4  \\ \hline
+
+{\bf Aggregates} (7 pts)           &         \\
+Functionality                      &   \hfill / 3   \\
+Quality of Solution                &   \hfill / 4   \\ \hline
+
+{\bf Code Clarity}                 &   \hfill / 3   \\ \hline
+\rule{0mm}{8mm} {\huge\bf Total}     &   \hfill / 20  \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent {\LARGE \bf Comments:}
+}
+
+\ignore{
+\section{Grading}
+Each summary is worth 20\% of the assignment mark.  The bonus portion
+is worth an additional 10\% of the assignment mark.  Each of the
+five application summaries and the bonus part will be graded according
+to the following rubric:\footnote{Based in part on Fleming, ``Grading
+Rubric for Written Assignments'', CSCI 2100, 2011}
+
+
+
+\hyphenpenalty=0
+\newcommand{\desc}[1]{\parbox[t]{1.18in}{\sloppy \footnotesize #1\vspace*{1ex}}}
+%\newcommand{\desc}[1]{\begin{minipage}[t]{1.16in}\sloppy \raggedright \small #1\vspace*{1ex}\end{minipage}}
+\begin{table}[h]
+\begin{center}
+\sloppy
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+                    & Exceptional: A & Acceptable: B & Substandard: C-D & Unacceptable: F \\
+\hline
+\hline
+
+\parbox[t]{0.90in}{\bf Novelty \\ (20\%)}
+                    & \desc{Application is exceptionally novel and uses
+                       mobile technologies in new and interesting ways.}
+                    & \desc{Application is somewhat novel and uses
+                       mobile technologies in interesting combinations.}
+                    & \desc{Application is mundane but uses
+                       mobile technologies in useful combinations.}
+                    & \desc{Application is mundane novel and uses
+                       mobile technologies in mundane ways.} \\
+\hline
+\parbox[t]{0.90in}{\bf Content \\ (30\%)}
+                    & \desc{Ideas well organized and logically laid out always 
+                       or almost always.  Shows~superior understanding of the 
+                       subject. } 
+                    & \desc{Ideas well organized and logically laid out with 
+                       competence. Shows 
+                       commonplace understanding of the subject. } 
+                    & \desc{Minimal organization and logical progression of 
+                       ideas. Shows partial 
+                       familiarity with the subject.} 
+                    & \desc{Little or no organization or logical flow of ideas. 
+                       Shows a great deal of 
+                       misunderstanding about the subject. } \\
+\hline
+\parbox[t]{0.90in}{\bf Analysis \\ (30\%)}
+                    & \desc{Addresses all points. Justifies all design 
+                       decisions.  Discusses criteria used in justifications.   
+                       Considers the issues from multiple points of view.}
+                    & \desc{Addresses most of the points.  Justifies most 
+                       design decisions.  Identifies criteria used in 
+                       justifications.} 
+                    & \desc{Addresses some of the points. Justifies some design
+                       decisions.  Identifies some criteria in the analysis.}
+                    & \desc{Addresses few of the points.  Little or no 
+                       justification and no identification of the criteria 
+                       used.}\\
+\hline
+\parbox[t]{0.90in}{{\bf Writing \\ (20\%)\\} \footnotesize\sloppy
+                    Style and tone, standard conventions for grammar, word use, 
+                    spelling, citations, headings, paragraphs, figures, and 
+                    tables. \vspace*{1ex}}
+                    & \desc{Shows exceptional use of tone and style. Speaks 
+                      to the reader with precise, concise, appropriate 
+                      language and choice of words.  Always uses standard 
+                      conventions.  The document looks professional.}
+                    & \desc{Shows competent use of tone and style. Makes good 
+                      word choices.  Mostly uses standard conventions.  The 
+                      document could use some editing.}
+                    & \desc{Shows minimal attention to tone and style. 
+                      Shows poor usage or ineffective word variation.
+                      Does not consistently use standard conventions.  
+                      The document requires significant editing.}
+                    & \desc{Shows little or no understanding of appropriate 
+                      tone. Uses inappropriate language and word choice.
+                      Standard conventions are flouted.  Document is 
+                      unreadable.} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+}
+\end{document}

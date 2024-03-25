@@ -1,0 +1,64 @@
+Bug Report
+==========
+
+Error 1:
+  Class: FriendRecommender
+ Method: makeRecommendations()
+  Test Method: testTwoFriends()
+  Message: Wrong recommendation count
+
+Error 2:
+  Class: FriendRecommender
+  Method: makeRecommendations()
+  Test Method: testTwoFriendsSorted()
+  Message: Wrong recommendation count
+
+Error 3:
+  Class: User
+  Method: Constructor
+  Test Method: testConstructorSameName
+  Message: User not in HashMap
+
+Error 4:
+  Class: User
+  Method: find()
+  Test Method: testFind()
+  Message: find returned the wrong user
+
+Error 5:
+  Class: User
+  Method: unfriend()
+  Test Method: testUnfriend()
+  Message: v's adj has the wrong size
+
+Error 6:
+  Class: User
+  Method: isFriend()
+  Test Method: testIsFriendTrue()
+  Message: isFriend returned false
+
+Error 7:
+  Class: User
+  Method: unfriend()
+  Test Method: testUnfriendOpposite()
+  Message: u's adj has the wrong size
+
+Error 8:
+  Class: User
+  Method: find()
+  Test Method: testFindMultiple()
+  Message: find returned the wrong user for u
+
+Error 9:
+  Class: User
+  Method: isFriend()
+  Test Method: testIsFriendFalse()
+  Message: isFriend returned true
+
+Error 10:
+  Class: User
+  Method: leave()
+  Test Method: testLeaveFriend()
+  Message: Incorrect size
+
+*********** ADD AS MANY MORE AS NEEDED *******************

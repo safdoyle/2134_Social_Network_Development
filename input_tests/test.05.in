@@ -1,0 +1,26 @@
+Alice joins
+Carol joins
+Bob joins
+Bob friends Alice
+Bob friends Carol
+Dave joins
+Dave friends Bob
+Eve joins
+Eve friends Bob
+Dave leaves
+Dave joins
+Dave friends Bob
+Dave unfriends Bob
+Dave friends Bob
+Fred joins
+Alice friends Fred
+Bob friends Fred
+Carol friends Fred
+Bob leaves
+Fred leaves
+Alice friends Carol
+Alice leaves
+Carol leaves
+Dave leaves
+Eve leaves
+end

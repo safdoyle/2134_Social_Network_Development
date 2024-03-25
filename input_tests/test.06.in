@@ -1,0 +1,19 @@
+Alice joins
+Bob joins
+Carol joins
+Dave joins
+Eve joins
+Fred joins
+Alice friends Bob
+Bob friends Carol
+Carol friends Dave
+Dave friends Eve
+Eve friends Fred
+Fred friends Alice
+Alice leaves
+Bob leaves
+Carol leaves
+Dave leaves
+Eve leaves
+Fred leaves
+end

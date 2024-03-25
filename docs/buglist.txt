@@ -1,0 +1,71 @@
+Bug Report
+==========
+
+
+For each fixed bug , please provide the following information:
+  - Class name
+  - Method name
+  - Line number
+	- Cause of bug
+  - Bug fix (or reason bug is not easily fixed)
+
+
+BUGS FOUND AND FIXED BY UNIT TEST (should be 4-5 more bugs to find):
+
+Bug 0:
+  Class: FriendRecommender
+	Method: makeRecommendations()
+	Line: 98
+	Cause: incorrect comparison
+	Fix: reversed comparison
+
+Bug 1:
+  Class: User
+	Method: Constructor
+	Line: 33
+	Cause: User with same name added to Hashmap
+	Fix: add a check to only add user if not already in HashMap
+
+Bug 2:
+  Class: User
+	Method: find()
+	Line: 43
+	Cause: string with name of variable used instead of variable
+	Fix: remove incorrect quotes
+
+Bug 3:
+  Class: User
+	Method: remove()
+	Line: 68
+	Cause:  u removed from u's adjacency list instead of this
+	Fix:  remove this from u's adjacency list
+
+Bug 4:
+  Class: User
+	Method: leave()
+	Line: 81
+	Cause: all users removed from HashMap
+	Fix: delete extra removal line
+
+Bug 5:
+  Class: User
+	Method: isFriend()
+	Line: 89
+	Cause: isFriend returns true instead of false and vice versa
+	Fix: reverse condition
+
+BUGS FOUND AND FIXED USING EXPECTED INPUT (2-3):
+
+Bug 6:
+  Class: FriendRecommender
+	Method: compute()
+	Line: 55
+	Cause: Case statement falls through "unfriends"
+	Fix: add break statement at end of "unfriends" case
+
+Bug 7:
+  Class: FriendRecommender
+	Method: recommend()
+	Line: 74
+	Cause: no recommendations made
+	Fix: add call to makeRecommendations() in both directions

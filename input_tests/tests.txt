@@ -1,0 +1,17 @@
+00 Empty test
+01 Basic recommendation
+02 Repeat recommendation
+03 Multiple recommendation
+04 Lots of users leave
+05 Lots of recommendations
+06 Cycle of recommendations
+07 Basic follow recommendation
+08 Reversed follow recommendation
+09 Mixed friend and follow multiple recommendation
+10 friend replaces follow relationship
+11 follow does not replace friend relationship
+12 Too few tokens
+13 Too many tokens
+14 Wrong token type
+15 User friends themself
+16 new friend should be recommended followers

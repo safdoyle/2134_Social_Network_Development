@@ -1,7 +1,4 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Collections;
+import java.util.*;
 
 /* User.java
  *
@@ -22,6 +19,8 @@ public class User {
   public static HashMap<String,User> users = new HashMap<String,User>();
   public String name;
   public HashMap<String,User> adj = new HashMap<String,User>();
+
+  public HashMap<String,User> adjFollow = new HashMap<String,User>();
 
   /* Constructor for the User class. The constructor takes a String, nm, which
    * is the name of the user. The constructor adds the user to the static
@@ -50,10 +49,51 @@ public class User {
    * does not change the friendship.
    *
    */
-  public User friend( String f ) {
+
+  /**
+   * The updated version of this method throws the necessary exception when the
+   * friends command is followed by an incorrect string. It also removes the
+   * "follows" relationship when users become friends.
+   * */
+
+  public User friend( String f ) throws InputMismatchException {
+
+    if(find(f) == null){
+      throw new InputMismatchException ("Invalid line: " + this.name + " friends " + f);
+    }
+
     User u = users.get( f );
+
+    if(this.doesFollow(u) || u.doesFollow(this)){
+      this.adjFollow.remove(u.name);
+      u.adjFollow.remove(this.name);
+    }
+
     adj.put( u.name, u );
     u.adj.put( name, this );
+    return u;
+  }
+
+  /**
+  * Method to establish a relationship where one user follows another.
+   * @param f is the name of the user to follow
+   * @return u is the user who is following f
+  * This method ends if the users are already friends and throws the appropriate
+   * exception when the given string is incorrect.
+  * */
+  public User follow( String f ) throws InputMismatchException{
+
+    if(find(f) == null){
+      throw new InputMismatchException ("Invalid line: " + this.name + " follows " + f);
+    }
+
+    User u = users.get( f );
+
+    if(this.isFriend(u)){
+      return u;
+    }
+
+    adjFollow.put( u.name, u );
     return u;
   }
 
@@ -62,10 +102,24 @@ public class User {
    * method returns the User that was unfriended. Unfriending removes the
    * friendship from adj and from the other user's adj.
    */
-  public User unfriend( String f ) {
+
+  /**
+  * The updated version of this method throws the necessary exception when the
+  * unfriends command is followed by an incorrect string. It also removes the
+  * "follows" relationship if a user unfriends another.
+  * */
+
+  public User unfriend( String f ) throws InputMismatchException{
+
+    if(find(f) == null){
+      throw new InputMismatchException ("Invalid line: " + this.name + " unfriends " + f);
+    }
+
     User u = users.get( f );
     adj.remove( u.name );
     u.adj.remove( this.name );
+    this.adjFollow.remove(u.name);
+
     return u;
   }
 
@@ -74,10 +128,19 @@ public class User {
    * from the static HashMap and removes the user from all of their friends'
    * adj.
    */
+
+  /**
+   * The updated method eliminates all the "follows"
+   * relationships of the departing user.
+   * */
   public void leave() {
     users.remove( name );
     for( User v : adj.values() ) {
       v.adj.remove( name );
+    }
+
+    for (User w : adjFollow.values() ){
+      w.adjFollow.remove( name );
     }
   }
 
@@ -88,4 +151,15 @@ public class User {
   public boolean isFriend( User u ) {
     return adj.containsKey( u.name );
   }
+
+  /** Method to determine whether this user follows the parameter
+   * user
+   * @param u The user we are checking this user follows
+   * @return a boolean value indicating if this user follows
+   *         the parameter user or not.
+   */
+  public boolean doesFollow( User u ) {
+    return adjFollow.containsKey( u.name );
+  }
+
 }

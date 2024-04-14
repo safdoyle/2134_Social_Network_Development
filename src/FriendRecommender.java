@@ -1,7 +1,4 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Collections;
+import java.util.*;
 
 /* FriendRecommender.java
  *
@@ -29,7 +26,11 @@ public class FriendRecommender {
    * and makes friend recommendations based on the input. The method returns an
    * ArrayList of Strings that contains the friend recommendations.
    */
-  public ArrayList<String> compute( Scanner input ) {
+
+  /**
+   * The updated version of this method handles all invalid input.
+   * */
+  public ArrayList<String> compute( Scanner input ) throws InputMismatchException {
     ArrayList<String> list = new ArrayList<String>();
 
     for(String s = input.nextLine(); !s.equals( "end" ); s = input.nextLine()) {
@@ -39,27 +40,64 @@ public class FriendRecommender {
 
       switch( line.next() ) {
         case "joins":
+          if(!line.hasNext("\n")){
+            throw new InputMismatchException("Invalid line: " + name + " joins " + line.next());
+          }
+
           assert( u == null );
           new User( name );
           break;
         case "leaves":
+          if(!line.hasNext("\n")){
+            throw new InputMismatchException("Invalid line: " + name + " leaves " + line.next());
+          }
+
           assert( u != null );
           u.leave();
           break;
         case "friends":
+
+          if(line.hasNext(name)){
+            throw new InputMismatchException("Invalid line: " + name + " friends " + name);
+          } else if (line.hasNext("\n")){
+            throw new InputMismatchException("Invalid line: " + name + " friends ");
+          }
+
           assert( u != null );
           recommend( u, u.friend( line.next() ), list );
           break;
         case "unfriends":
+
+          if(line.hasNext(name)){
+            throw new InputMismatchException("Invalid line: " + name + " unfriends " + name);
+          } else if (line.hasNext("\n")){
+            throw new InputMismatchException("Invalid line: " + name + " unfriends ");
+          }
+
           assert( u != null );
           u.unfriend( line.next() );
           break;
+        case "follows":
+
+          if(line.hasNext(name)){
+            throw new InputMismatchException("Invalid line: " + name + " follows " + name);
+          } else if (line.hasNext("\n")){
+            throw new InputMismatchException("Invalid line: " + name + " unfriends ");
+          }
+
+          assert( u != null );
+          u.follow( line.next() );
+          recommend( u, u.friend( line.next() ), list );
+          break;
         default:
-          System.out.println( "Unknown user action" );
+
+          throw new InputMismatchException("Invalid input: " + line.next());
       }
+
     }
     return list;
   }
+
 
   /* recommend
    * Given two users, u and f, and an ArrayList of Strings, al, this method
@@ -92,16 +130,46 @@ public class FriendRecommender {
    * A comes before B in sorted order. The method does not return anything so
    * the output is passed back in al.
    */
-  public void makeRecommendations( User u, User f, ArrayList<String> al ) {
-    for( User v : f.adj.values() ) {
-      if( (u != v) && !u.isFriend( v ) ) {
-        if( v.name.compareTo( u.name ) < 0 ) {
-          al.add( v.name + " and " + u.name + " should be friends" );
-        } else {
-          al.add( u.name + " and " + v.name + " should be friends" );
-        }
-      }  
-    }
-  }
 
+  /**
+   * The updated version of this method makes recommendations based
+   * on "follows" relationships now as well.
+   * */
+
+  public void makeRecommendations( User u, User f, ArrayList<String> al ) {
+
+
+    if(u.isFriend(f)){
+      for( User v : f.adj.values() ) {
+        if( (u != v) && !u.isFriend( v ) ) {
+          if( v.name.compareTo( u.name ) < 0 ) {
+            al.add( v.name + " and " + u.name + " should be friends" );
+          } else {
+            al.add( u.name + " and " + v.name + " should be friends" );
+          }
+        }
+      }
+
+      for( User v : u.adjFollow.values() ) {
+        if( (f != v) && !( f.isFriend( v ) && f.doesFollow( v ) )) {
+          al.add(f.name + " should follow " + v.name);
+        }
+      }
+
+      for( User v : f.adjFollow.values() ) {
+        if( (u != v) && !( u.isFriend( v ) && u.doesFollow( v ) )) {
+          al.add(u.name + " should follow " + v.name);
+        }
+      }
+
+    } else if (u.doesFollow(f) && !f.doesFollow(u)){
+
+      for(User v : u.adj.values()){
+        if(!v.doesFollow(f)){
+          al.add(v.name + " should follow " + f.name);
+        }
+      }
+    }
+
+  }
 }

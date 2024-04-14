@@ -27,16 +27,45 @@ Refactoring 1:
 CLASS-LEVEL REFACTORING SUGGESTED BUT NOT IMPLEMENTED
 
 Refactoring 2:
-  Location:
-	SOLID principle:
-	class implementation or class interface:
-	Cause:
-	Fix:
+  Location: User.java
+	SOLID principle: Single Responsibility Principle
+	class implementation or class interface: Class implementation
+	Cause: The user class also contains the social network objects
+	itself. Therefore, it has multiple responsibilities.
+	The social network HashMap are only changed through user actions
+	(friending, unfollowing, etc.) What if admin wishes to ban a user or
+	alter the network in some way?
+	Fix: A separate class can be used to store the social network itself
+	with its own methods, unrelated to user activity. Users will be separate
+	objects.
 
 Refactoring 3:
-  Location:
-	SOLID principle:
-	class implementation or class interface:
-	Cause:
-	Fix:
+  Location: FriendRecommender.java
+	SOLID principle: Single Responsibility Principle
+	class implementation or class interface: Class implementation
+	Cause: This class scans input and computes the actions to be taken
+	+ builds recommendation messages all in one class.
+	Fix: These can be implemented in two separate classes for clarity.
 
+Refactoring 4:
+  Location: User.java
+	SOLID principle:  Liskov Substitution Principle and
+	Interface Segregation Principle.
+	class implementation or class interface: Class interface
+	Cause: Users and the social network itself may share similar methods
+	(joins, leaves, etc.). Those they have in common can be specified in an interface they must both
+	implement for adherence to requirements.
+	Fix: Create the necessary interface and ensure it is implemented by both classes.
+
+ Refactoring 5:
+   Location: User.java
+ 	SOLID principle: Open/Close Principle
+ 	class implementation or class interface: Class implementation
+ 	Cause: There are different types of users. For example, some social networks
+ 	allow children to make pages. There would be restrictions to be enforced
+ 	in relation to these accounts (Example: Adult can't friend children without
+ 	third-party parental approval). Therefore, this class may need to be altered
+ 	later on.
+ 	Fix: add attributes that indicate the type of user and alter methods to account
+ 	for user type OR implement a new specialized user class that inherits from
+ 	the current one.
